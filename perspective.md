@@ -7,7 +7,7 @@ An image is a 2d projection of a 3D world.
 * For example, assume the origin of the image plane is located at pixels (0,0) at the lower left hand corner(before plane inversion). point p is then  the sum of two vectors -- the vector from origin of the image plane to o lets call it v, and the vector from o to p lets call it p. Assume point o is located at on the image plane(approximatelythe middle point) which corresponds to (0,0, Z_i) in the camera frame, and thus we can solve for the vector r_i(in the picture red arrow from camera frame origin to r_i) with the following: r_i = (p_x-v_x,p_y-y_x,Z_I)=(x_i,y_i,z_i) in the camera frame. Note r_i is still the 2d point on the image plane represented in the camera frame.
 
 ## perspective model(pinhole)
-Perserves lines between 3d and 2d projections, but does preseve angles or distances(due to Z).
+Perserves lines between 3d and 2d projections, but does not preseve angles or distances(due to Z).
 
 Formula:(lowercase variables are 2d points, uppercase are 3d points) 
 * x=X*(f/Z) (non linear transformation due to Z)(f is focal length-distance between O(camera frame origin and image plane))
