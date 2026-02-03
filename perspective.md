@@ -11,7 +11,7 @@ Perserves lines between 3d and 2d projections, but does not preseve angles or di
 
 Formula:(lowercase variables are 2d points, uppercase are 3d points) 
 * x=X*(f/Z) (non linear transformation due to Z)(f is focal length-distance between O(camera frame origin and image plane))
-* m=f/Z (m is the magnitude)(all points on plane Z have same magnitude)
+* m=f/Z (m is the magnification)(all points on plane Z_i have same magnification)
 
 
 ### weak perspective
