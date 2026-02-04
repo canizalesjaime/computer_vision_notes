@@ -72,6 +72,7 @@ $$
 ### Translation (2D example)
 
 $$
+\begin{aligned}
 \begin{bmatrix}
 1 & 0 & t_x \\
 0 & 1 & t_y \\
@@ -82,13 +83,15 @@ x \\
 y \\
 1
 \end{bmatrix}
-=
+&=
 \begin{bmatrix}
 x + t_x \\
 y + t_y \\
 1
 \end{bmatrix}
+\end{aligned}
 $$
+
 
 Now translation **is** a matrix multiplication.
 
@@ -124,6 +127,7 @@ Why?
 Example:
 
 $$
+\begin{aligned}
 \begin{bmatrix}
 1 & 0 & t_x \\
 0 & 1 & t_y \\
@@ -134,13 +138,15 @@ v_x \\
 v_y \\
 0
 \end{bmatrix}
-=
+&=
 \begin{bmatrix}
 v_x \\
 v_y \\
 0
 \end{bmatrix}
+\end{aligned}
 $$
+
 
 Perfect behavior.
 
