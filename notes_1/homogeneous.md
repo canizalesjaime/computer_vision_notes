@@ -117,8 +117,8 @@ This single matrix does:
 
 Homogeneous coordinates distinguish **points** and **direction vectors**:
 
-- **Point**: \((x, y, 1)\)
-- **Vector**: \((v_x, v_y, 0)\)
+- **Point**: $(x, y, 1)$
+- **Vector**: $(v_x, v_y, 0)$
 
 Why?
 - Vectors should **not** move under translation.
@@ -186,14 +186,3 @@ This allows:
 - depth perception
 - vanishing points
 - realistic perspective
-
----
-
-## 7. Summary
-
-**Homogeneous coordinates:**
-- Add one extra dimension
-- Allow translation to be a matrix multiplication
-- Unify all affine transformations
-- Distinguish points (\(w = 1\)) from vectors (\(w = 0\))
-- Enable perspective projection and points at infinity
