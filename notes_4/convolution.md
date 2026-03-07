@@ -524,7 +524,7 @@ Spreads influence evenly.
 Gaussian filter:
 Spreads influence smoothly and naturally.
 
-## Try 2d convolution with horizontal sobel filter for:
+## 2D convolution example with horizontal sobel filter for:
  ```
  [
  [0,0,0,0,0,0,0,0],
@@ -560,3 +560,156 @@ Sx = [
  [0,0,0,0,0,0,0,0]
 ]
 ```
+
+
+## example of gaussian filter broken down into two 1d filters
+Let's walk through a full numeric example to show that using two 1D convolutions gives the exact same result as the full 3×3 Gaussian convolution.
+
+We will compute the center pixel value.
+
+### 1. Image patch
+
+Suppose the image region is
+```
+I =
+
+[10  20  30
+ 40  50  60
+ 70  80  90]
+```
+
+### 2. 3×3 Gaussian kernel
+```
+G = (1/16) *
+
+[1  2  1
+ 2  4  2
+ 1  2  1]
+```
+
+### 3. Method 1 — Direct 2D convolution
+
+Multiply element-wise and sum.
+```
+((1*10) + (2*20) + (1*30)
++ (2*40) + (4*50) + (2*60)
++ (1*70) + (2*80) + (1*90)) / 16 = 50
+```
+
+**Compute:**
+* Row 1: 10 + 40 + 30 = 80
+* Row 2: 80 + 200 + 120 = 400
+* Row 3: 70 + 160 + 90 = 320
+* Total: 80 + 400 + 320 = 800
+* Divide by 16: 800 / 16 = 50
+* **Center pixel = 50**
+
+### 4. Method 2 — Using two 1D filters
+Gaussian kernel factorization:
+```
+Vertical filter
+v = (1/4) *
+[1
+ 2
+ 1]
+
+Horizontal filter
+h = (1/4) * [1  2  1]
+```
+
+### Step 1 — Horizontal convolution
+```
+Apply [1 2 1] / 4 to each row.
+
+Row 1
+(10 + 2*20 + 30) / 4
+= (10 + 40 + 30) / 4
+= 80 / 4
+= 20
+
+Row 2
+(40 + 2*50 + 60) / 4
+= (40 + 100 + 60) / 4
+= 200 / 4
+= 50
+
+Row 3
+(70 + 2*80 + 90) / 4
+= (70 + 160 + 90) / 4
+= 320 / 4
+= 80
+
+Intermediate result column:
+
+[20
+ 50
+ 80]
+```
+
+### Step 2 — Vertical convolution
+```
+Apply [1 2 1]^T / 4
+
+(20 + 2*50 + 80) / 4
+= (20 + 100 + 80) / 4
+= 200 / 4
+= 50
+```
+
+### Final result
+50
+
+Same result as the direct 3×3 convolution.
+
+### Why this works
+
+The Gaussian kernel is separable.
+```
+[1  2  1
+ 2  4  2
+ 1  2  1]
+
+can be written as:
+
+[1
+ 2
+ 1]
+*
+[1  2  1]
+(* means matrix multiplication in this context)
+Then scaled by 1/16.
+```
+
+So performing horizontal convolution first and then vertical convolution produces the exact same result as the full 2D convolution.
+
+## Applying Sobel Filters Sequentially
+If you want to detect vertical and horizontal edges using Sobel filters, you must apply the Sobel X and Sobel Y filters independently to the original image.
+
+**You should NOT apply one Sobel filter to the result of the other.**
+
+**Sobel Filters(used to detect lines by computing derivatives of the image.)**
+```
+SobelX = [
+ [-1, 0, 1],
+ [-2, 0, 2],
+ [-1, 0, 1]
+]
+SobelX → derivative in x direction  
+
+SobelY = [
+ [-1, -2, -1],
+ [0, 0, 0],
+ [1, 2, 1]
+]
+SobelY → derivative in y direction
+```
+
+### Method
+Given an input image In:
+
+1) Compute the horizontal gradient (vertical edges): ```Gx = In * SobelX```
+2) Compute the vertical gradient (horizontal edges): ```Gy = In * SobelY```
+3) Combine them to obtain edge magnitude: ```Magnitude = sqrt(Gx^2 + Gy^2)```
+or sometimes ```Magnitude = |Gx| + |Gy|```
+
+[EXAMPLE](./1d_convolution_sobel_filter_example.pdf)
