@@ -1,4 +1,4 @@
-# Intro
+no# Intro
 Convolution is a mathematical operation that combines two functions (or signals) to show how one modifies or “blends with” the other over time or space. It shows up everywhere: signal processing, image filtering, probability, and neural networks.
 
 ## Convolution in images
@@ -338,8 +338,6 @@ Both are:
 - You are doing computer vision
 
 ## Advantage of Using Different Size Filters for Box and Gaussian
-
-Excellent question — filter size is actually more important than most people realize.
 
 Changing the size changes how much smoothing happens and what frequencies get removed.
 
