@@ -339,8 +339,6 @@ Both are:
 
 ## Advantage of Using Different Size Filters for Box and Gaussian
 
-Excellent question — filter size is actually more important than most people realize.
-
 Changing the size changes how much smoothing happens and what frequencies get removed.
 
 
