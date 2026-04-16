@@ -24,41 +24,38 @@ $cosθ = \frac{e^{jθ} + e^{-jθ}}{2}$
 ## Conversion 
 Convert:
 
-$$
-f(t) = \sin(2\pi \cdot 5t) + 0.5 \cdot \sin(2\pi \cdot 20t)
-$$
+$f(t) = \sin(2\pi \cdot 5t) + 0.5 \cdot \sin(2\pi \cdot 20t)$
 
 Using Euler's formula:
 
 ### 1. First term
 
-$$
-\sin(2\pi \cdot 5t)
-=
-\frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j}
-$$
+$\sin(2\pi \cdot 5t)$
+
+$= \frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j}$
+
+---
 
 ### 2. Second term
 
-$$
-0.5 \cdot \sin(2\pi \cdot 20t)
-=
-\frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}
-$$
+$0.5 \cdot \sin(2\pi \cdot 20t)$
+
+$= 0.5 \cdot \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{2j}$
+
+$= \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
+
+---
 
 ### Combined
 
-$$
-f(t)
-=
-\frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j}
-+
-\frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}
-$$
+$f(t) =$  
 
-- Now \(f(t)\) is expressed as a sum of complex exponentials  
+$\frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j}$  
+
+$+ \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
+
+- Now $f(t)$ is expressed as a sum of complex exponentials  
 - This is the form used in Fourier analysis
-
 ---
 
 ## Understanding waves
