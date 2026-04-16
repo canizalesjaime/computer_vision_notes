@@ -50,9 +50,7 @@ $= \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
 
 $f(t) =$  
 
-$\frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j}$  
-
-$+ \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
+$\frac{e^{j 2\pi 5t} - e^{-j 2\pi 5t}}{2j} + \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
 
 - Now $f(t)$ is expressed as a sum of complex exponentials  
 - This is the form used in Fourier analysis
@@ -60,7 +58,7 @@ $+ \frac{e^{j 2\pi 20t} - e^{-j 2\pi 20t}}{4j}$
 
 ## Understanding waves
 
-Given: $f(x) = A*sin(ω*x + φ) + c$
+Given: $f(x) = A \sin(\omega x + \phi) + c$
 
 Term meanings:
 
@@ -72,7 +70,7 @@ Term meanings:
 
 Example:
 
-$f(x) = 3*sin(2π*10*x + π/4) + 2$
+$f(x) = 3 \sin(2\pi \cdot 10x + \frac{\pi}{4}) + 2$
 
 - Amplitude = 3 → wave peaks ±3 from baseline  
 - Angular frequency = 2π*10 → frequency = 10 Hz  
@@ -108,9 +106,9 @@ time domain → frequency domain
 ## The formula
 Here’s the continuous Fourier transform:
 $X(f) = \int_{-\infty}^{\infty} x(t) \, e^{-j 2 \pi f t} \, dt$
-- $ x(t) $: original signal (time domain)  
-- $ X(f) $: frequency representation  
-- $ e^{-i 2 \pi f t} $: complex sinusoid (basis function)
+- $x(t)$: original signal (time domain)  
+- $X(f)$: frequency representation  
+- $e^{-i 2 \pi f t}$: complex sinusoid (basis function)
 
 ---
 
