@@ -179,7 +179,7 @@ It does the *same thing* as the DFT—but **much faster**.
 The DFT takes a signal with N samples and computes its frequency components.
 
 Naively:
-- DFT complexity = O(N^2) → slow for large data
+- DFT complexity = $O(N^2)$ → slow for large data
 
 FFT improves this to:
 - O(N log N) → dramatically faster
@@ -187,7 +187,7 @@ FFT improves this to:
 ---
 
 ## The DFT formula (what FFT computes)
-$ X_k = \sum_{n=0}^{N-1} x_n \, e^{-i \frac{2\pi}{N} k n} $
+$X_k = \sum_{n=0}^{N-1} x_n \, e^{-i \frac{2\pi}{N} k n}$
 
 - $x_n$: input signal  
 - $X_k$: frequency components  
@@ -261,7 +261,7 @@ So the signal is:
 
 ## 2. The 10 input samples (time domain)
 
-Let \( N = 10 \), and samples \( x[n] \):
+Let (N = 10), and samples (x[n]):
 
 
 | n   | 0    | 1    | 2    | 3    | 4    | 5    | 6     | 7     | 8     | 9     |
@@ -281,7 +281,7 @@ $X[k] = \sum_{n=0}^{N-1} x[n] e^{-j\frac{2\pi}{N}kn}$
 
 This means:
 
-> each \(k\) checks “how much frequency \(k\)” exists in the signal
+> each (k) checks “how much frequency (k)” exists in the signal
 
 ---
 
@@ -344,9 +344,9 @@ $X = Wx$
 
 Where:
 
-- \(x\) = 10 time samples  
-- \(X\) = 10 frequency bins  
-- \(W\) = 10×10 DFT matrix  
+- (x) = 10 time samples  
+- (X) = 10 frequency bins  
+- (W) = 10×10 DFT matrix  
 
 ---
 
@@ -379,14 +379,7 @@ $W_{k,n} = e^{-j\frac{2\pi}{10}kn}$
 
 So the matrix looks like:
 
-$W =
-\begin{bmatrix}
-1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
-1 & \omega & \omega^2 & \omega^3 & \cdots & \omega^9 \\
-1 & \omega^2 & \omega^4 & \cdots & \omega^{18} \\
-\vdots & & & \ddots & \vdots \\
-1 & \omega^9 & \omega^{18} & \cdots & \omega^{81}
-\end{bmatrix}$
+$W = \begin{bmatrix} 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 1 & \omega & \omega^2 & \omega^3 &\cdots & \omega^9 \\ 1 & \omega^2 & \omega^4 & \cdots & \omega^{18} \\\vdots & & & \ddots & \vdots \\ 1 & \omega^9 & \omega^{18} & \cdots & \omega^{81}\end{bmatrix}$
 
 Where:
 
@@ -402,7 +395,7 @@ So:
 
 ## 4. What one full row multiplication looks like
 
-Let’s fully expand \(k = 1\).
+Let’s fully expand (k = 1).
 
 We compute:
 
@@ -442,40 +435,14 @@ Now substitute values:
 ## 6. The full 10×10 structure (conceptually)
 
 
-$$
-\begin{bmatrix}
-X[0] \\
-X[1] \\
-X[2] \\
-X[3] \\
-X[4] \\
-X[5] \\
-X[6] \\
-X[7] \\
-X[8] \\
-X[9]
-\end{bmatrix}
-=
-\begin{bmatrix}
-1 & 1 & \cdots & 1 \\
-1 & \omega & \cdots & \omega^9 \\
-1 & \omega^2 & \cdots & \omega^{18} \\
-\vdots & & \ddots & \vdots \\
-1 & \omega^9 & \cdots & \omega^{81}
-\end{bmatrix}
-\begin{bmatrix}
-x[0] \\
-x[1] \\
-\vdots \\
-x[9]
-\end{bmatrix}
-$$
+
+$\begin{bmatrix}X[0] \\X[1] \\X[2] \\X[3] \\X[4] \\X[5] \\X[6] \\X[7] \\X[8] \\X[9]\end{bmatrix}=\begin{bmatrix}1 & 1 & \cdots & 1 \\1 & \omega & \cdots & \omega^9 \\1 & \omega^2 & \cdots &\omega^{18} \\\vdots & & \ddots & \vdots \\1 & \omega^9 & \cdots & \omega^{81}\end{bmatrix}\begin{bmatrix}x[0] \\x[1] \\\vdots \\x[9]\end{bmatrix}$
 
 ---
 
 ## Key insight
 
-Each output \(X[k]\) is:
+Each output (X[k]) is:
 
 > “Take the signal and test it against a rotating wave”
 
