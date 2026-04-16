@@ -379,7 +379,7 @@ $W_{k,n} = e^{-j\frac{2\pi}{10}kn}$
 
 So the matrix looks like:
 
-$W = \begin{bmatrix} 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 1 & \omega & \omega^2 & \omega^3 &\cdots & \omega^9 \\ 1 & \omega^2 & \omega^4 & \cdots & \omega^{18} \\\vdots & & & \ddots & \vdots \\ 1 & \omega^9 & \omega^{18} & \cdots & \omega^{81}\end{bmatrix}$
+<img src="imgs/img1.png" width="400"/>
 
 Where:
 
@@ -433,10 +433,7 @@ Now substitute values:
 ---
 
 ## 6. The full 10×10 structure (conceptually)
-
-
-
-$\begin{bmatrix}X[0] \\X[1] \\X[2] \\X[3] \\X[4] \\X[5] \\X[6] \\X[7] \\X[8] \\X[9]\end{bmatrix}=\begin{bmatrix}1 & 1 & \cdots & 1 \\1 & \omega & \cdots & \omega^9 \\1 & \omega^2 & \cdots &\omega^{18} \\\vdots & & \ddots & \vdots \\1 & \omega^9 & \cdots & \omega^{81}\end{bmatrix}\begin{bmatrix}x[0] \\x[1] \\\vdots \\x[9]\end{bmatrix}$
+<img src="imgs/img2.png" width="400"/>
 
 ---
 
@@ -454,3 +451,67 @@ That’s why in our result:
 - k = 1 → big peak  
 - k = 3 → smaller peak  
 - others → ~0  
+
+## Putting it all together to get final formula
+Here are the core formulas for extracting amplitude and phase from DFT coefficients for inverse reconstruction.
+
+---
+
+### 1. DFT coefficient form
+
+Each frequency bin is:
+$X[k] = \text{Re}(X[k]) + j\,\text{Im}(X[k])$
+
+or equivalently:
+$X[k] = |X[k]| e^{j\phi_k}$
+
+---
+
+### 2. Amplitude formula
+
+For a real-valued signal:
+$A_k = \frac{2}{N} |X[k]|$
+
+
+---
+
+### 3. Phase formula
+$\phi_k = \arg(X[k]) = \tan^{-1}\left(\frac{\text{Im}(X[k])}{\text{Re}(X[k])}\right)$
+
+Always use:
+$\phi_k = \text{atan2}(\text{Im}(X[k]), \text{Re}(X[k]))$
+
+to get the correct quadrant.
+
+---
+
+### 4. IDFT reconstruction formula
+
+Once amplitude and phase are known:
+$x[n] = \sum_{k=0}^{N-1} A_k \cos\left(\frac{2\pi kn}{N} + \phi_k\right)$
+
+---
+
+### 5. Example (from our 10-sample signal)
+
+Given:
+- (X[1] = -j5)
+- (X[3] = -j2.5)
+- (N = 10)
+
+### Amplitudes:
+$A_1 = \frac{2}{10} \cdot 5 = 1$
+
+$A_3 = \frac{2}{10} \cdot 2.5 = 0.5$
+
+### Phases:
+$\phi_1 = \phi_3 = -\frac{\pi}{2}$
+
+---
+
+### 6. Final reconstructed signal
+
+$x[n] =\sin\left(\frac{2\pi n}{10}\right)+0.5 \sin\left(\frac{2\pi 3n}{10}\right)$
+
+---
+
