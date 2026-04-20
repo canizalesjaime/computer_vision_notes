@@ -631,3 +631,52 @@ You can:
 
 ---
 
+
+## Convolution in fourier space
+The short version is: convolution is expensive because it mixes neighborhoods everywhere; the Fourier transform changes basis so those interactions disappear, leaving only cheap, independent multiplications.
+
+---
+
+## The key identity
+
+f * g  <->  F(u,v) G(u,v)
+
+Convolution in space corresponds to pointwise multiplication in frequency.
+
+---
+
+## Where the speedup comes from
+
+### Spatial (direct convolution)
+
+For an N x N image and a K x K kernel:
+
+- Each output pixel requires K^2 operations  
+- Total work is approximately N^2 K^2  
+
+This sliding window causes a lot of repeated computation because neighboring regions overlap.
+
+---
+
+### Frequency (FFT method)
+
+1. FFT(image) -> O(N^2 log N)  
+2. FFT(kernel, zero-padded) -> O(N^2 log N)  
+3. Pointwise multiply -> O(N^2)  
+4. Inverse FFT -> O(N^2 log N)  
+
+Total complexity is approximately O(N^2 log N)
+
+---
+
+## Intuition
+
+- In the spatial domain, pixels interact with neighbors (expensive)
+- In the frequency domain, everything is expressed in orthogonal basis functions
+- Each frequency component is independent
+
+So convolution becomes:
+- scaling each frequency independently
+- no sliding window
+- no repeated work
+
