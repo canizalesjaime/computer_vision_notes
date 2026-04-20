@@ -515,3 +515,119 @@ $x[n] =\sin\left(\frac{2\pi n}{10}\right)+0.5 \sin\left(\frac{2\pi 3n}{10}\right
 
 ---
 
+
+
+## Fourier Transform for Images
+
+Think of the Fourier transform of an image as **changing coordinates**:  
+from pixels (what value is at each \((x,y)\)) to frequencies (how much of each 2D “wave pattern” is present).
+
+---
+
+### Core idea
+
+An image can be built by adding up many 2D sinusoidal patterns (waves) with different:
+
+- **frequencies** (how fast they vary)  
+- **orientations** (direction of the stripes)  
+- **phases** (where the pattern is shifted)  
+
+The Fourier transform tells you **how much of each pattern** is in the image.
+
+---
+
+### The 2D Fourier Transform
+
+
+$F(u,v) = \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} f(x,y)\, e^{-j 2\pi \left(\frac{ux}{M} + \frac{vy}{N}\right)}$
+
+- f(x,y): image (spatial domain)  
+- F(u,v): frequency content (frequency domain)  
+- u, v : frequencies in horizontal and vertical directions  
+
+---
+
+## 🔍 What the frequency domain represents
+
+Each point (u,v) corresponds to a **2D wave**:
+
+-  u  → horizontal frequency  
+-  v  → vertical frequency  
+
+So instead of “pixel intensity at a location,” you now have:
+
+> “How strong is this particular wave pattern in the image?”
+
+---
+
+### How to read the spectrum (after `fftshift`)
+
+- **Center** → low frequencies (smooth lighting, large shapes)  
+- **Far from center** → high frequencies (edges, fine details)  
+- **Brightness** → strength (magnitude)  
+
+---
+
+### Geometric intuition
+
+Each frequency component is like a **basis direction** in a huge vector space:
+
+- Image = vector  
+- Fourier transform = its **coordinates in the frequency basis**  
+
+And those basis functions e^{j(ux+vy)} are **orthogonal**, so each frequency is independent.
+
+---
+
+### What the waves look like
+
+- Low frequency → slow gradients (blurred patterns)  
+- High frequency → rapid oscillations (sharp edges)  
+- Direction depends on (u,v)  
+
+**Examples:**
+- A vertical edge → strong horizontal frequencies  
+- A repeating grid → distinct spikes in frequency space  
+
+---
+
+### What the output actually is
+
+F(u,v) is **complex-valued**:
+
+- **Magnitude** → how much of that frequency  
+- **Phase** → where that pattern is positioned  
+
+- Magnitude = *what frequencies exist*  
+- Phase = *how they line up to form the image*  
+
+---
+
+### Crucial insight
+
+- Magnitude alone ≠ image  
+- Phase carries most of the **structure**
+
+You can:
+- Keep phase, distort magnitude → still recognizable  
+- Keep magnitude, randomize phase → looks like noise  
+
+---
+
+### Why this is useful
+
+### 1. Filtering
+- Remove high frequencies → blur  
+- Remove low frequencies → edge enhancement  
+
+### 2. Noise removal
+- Periodic noise → shows as spikes → easy to remove  
+
+### 3. Compression
+- Keep only important frequencies  
+
+### 4. Fast convolution
+- Convolution in space = multiplication in frequency  
+
+---
+
