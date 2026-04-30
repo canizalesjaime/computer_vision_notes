@@ -103,8 +103,9 @@ Requirement: - Light directions must be **linearly independent in 3D**
 
 ### Estimating Light Direction
 
-From each image: 
-1. Find centroid ($x_c,y_c$), and radius(R) of sphere.
+From each image: <br>
+<img src="imgs/math.png" width="700">
+<!-- 1. Find centroid ($x_c,y_c$), and radius(R) of sphere.
 2. Find the **brightest pixel** in the sphere call it ($x_b,y_b$)
 3. Compute the **normal of the sphere at that point**(Assumption: -Orthographic projection). Let:
     * Equation for a sphere: $R^2=(x-x_c)^2+(y-y_c)^2+(z-z_c)^2$, where point (x,y,z) satisfies the equation
@@ -118,6 +119,6 @@ From each image:
     * Finally, we get: $N= \begin{bmatrix} X \\ Y \\ \sqrt{R^2-X^2-Y^2} \end{bmatrix}$
     * Normalize Normal vector to get unit normal: $s= \hat n= \frac{1}{R}\begin{bmatrix} X \\ Y \\ \sqrt{R^2-X^2-Y^2} \end{bmatrix}$
     * Use the pixel value at $(x_b,y_b)=\lambda$ as an approximation of to $L_i$, thus: $\~{s}=\lambda s$
-4. Repeat this for each image, to get light the corresponding light source vector: $\~{s}_1,\~{s}_2, \~{s}_3$, and put it together in the s-matrix = $\begin{bmatrix}&\~{s}_1&\\ &\~{s}_2&  \\ &\~{s}_3& \end{bmatrix}$
+4. Repeat this for each image, to get light the corresponding light source vector: $\~{s}_1,\~{s}_2, \~{s}_3$, and put it together in the s-matrix = $\begin{bmatrix}&\~{s}_1&\\ &\~{s}_2&  \\ &\~{s}_3& \end{bmatrix}$ -->
 
 
