@@ -104,7 +104,7 @@ Requirement: - Light directions must be **linearly independent in 3D**
 ### Estimating Light Direction
 
 From each image: <br>
-<img src="imgs/math.png" width="700">
+<img src="imgs/math.png" width="900">
 <!-- 1. Find centroid ($x_c,y_c$), and radius(R) of sphere.
 2. Find the **brightest pixel** in the sphere call it ($x_b,y_b$)
 3. Compute the **normal of the sphere at that point**(Assumption: -Orthographic projection). Let:
@@ -121,4 +121,15 @@ From each image: <br>
     * Use the pixel value at $(x_b,y_b)=\lambda$ as an approximation of to $L_i$, thus: $\~{s}=\lambda s$
 4. Repeat this for each image, to get light the corresponding light source vector: $\~{s}_1,\~{s}_2, \~{s}_3$, and put it together in the s-matrix = $\begin{bmatrix}&\~{s}_1&\\ &\~{s}_2&  \\ &\~{s}_3& \end{bmatrix}$ -->
 
+## Solving for surface normals and albedo
+<img src="imgs/compute.png" width="900">
+<!-- Lets take another look at our equation: $L_o=\~{s} \cdot g$:
+* we have our approximate values in our object image for $L_o$
+* We just solved for three light sources $\~{s}_j$ to obtain our S-matrix
+* All we need is g, which remember is $\rho \hat n$ (albedo times normal)
+* Using the same light sources, we obtain images of our objects. 
+* In each object image, pixel indices should correspond, so we can reference the same point across three different images with three different image intensities. $L_o=\begin{bmatrix} (x,y)_1 \\ (x,y)_2 \\ (x,y)_3\end{bmatrix} = \begin{bmatrix} I_1 \\ I_2 \\ I_3\end{bmatrix}$
+* Using the inverse of s-matrix, solve for g vector: s-matrix $^{-1}L_o=g$
+* surface normal is: $\frac{1}{|g|}g$ - for point $(x,y)$ across all three object images
+* albedo: |g| - for point $(x,y)$ across all three object images -->
 
