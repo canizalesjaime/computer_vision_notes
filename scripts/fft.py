@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-# # Step 1: Create the signal
+# Step 1: Create the signal
 # fs = 100  # Sampling frequency (Hz)
 # t = np.linspace(0, 1, fs, endpoint=False)
 
@@ -38,7 +38,7 @@ import cv2
 
 ##############################################################################
 
-img = cv2.imread('home_bot.jpg', 0)
+img = cv2.imread('image.jpg', 0)
 
 # Apply FFT
 f = np.fft.fft2(img)
