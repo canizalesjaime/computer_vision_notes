@@ -397,3 +397,13 @@ The calibrated parameters can then be used for:
 - AR applications,
 - image undistortion,
 - measurement tasks.
+
+## TESTING
+$$
+A =
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+$$
