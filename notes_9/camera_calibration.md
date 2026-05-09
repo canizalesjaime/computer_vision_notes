@@ -38,17 +38,31 @@ A camera transforms a 3D world point into a 2D image point.
 
 A point in the world:
 
-$P_w =\begin{bmatrix}X \\ Y \\ Z \\ 1 \end{bmatrix}$
+$$
+P_w =\begin{bmatrix}
+X \\ 
+Y \\
+Z \\
+1 \end{bmatrix}
+$$
 
 is projected into image coordinates:
 
-$p = \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}$
+$$
+p = \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
+$$
 
 using the camera model.
 
 The full projection equation is:
 
-$s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} \begin{bmatrix} X \\ Y \\ Z \\ 1 \end{bmatrix}$
+$$
+s \begin{bmatrix}
+u \\ 
+v \\ 
+1 
+ \end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} \begin{bmatrix} X \\ Y \\ Z \\ 1 \end{bmatrix}
+$$
 
 where:
 
@@ -82,7 +96,9 @@ They describe:
 
 These values are stored in the **intrinsic matrix**:
 
-$ K = \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1\end{bmatrix}$
+$$
+K = \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1\end{bmatrix}
+$$
 
 ---
 
@@ -155,7 +171,9 @@ where:
 
 The translation vector describes the camera’s position relative to the world coordinate system.
 
-$t =\begin{bmatrix} t_x \\ t_y \\ t_z \end{bmatrix}$
+$$
+t =\begin{bmatrix} t_x \\ t_y \\ t_z \end{bmatrix}
+$$
 
 It tells us how far the camera is shifted in:
 
@@ -190,7 +208,9 @@ Rotation about the x-axis changes:
 
 The matrix is:
 
-$R_x(\theta) = \begin{bmatrix} 1 & 0 & 0 \\ 0 & \cos\theta & -\sin\theta \\ 0 & \sin\theta & \cos\theta \end{bmatrix}$
+$$
+R_x(\theta) = \begin{bmatrix} 1 & 0 & 0 \\ 0 & \cos\theta & -\sin\theta \\ 0 & \sin\theta & \cos\theta \end{bmatrix}
+$$
 
 Effect:
 - x-coordinate stays unchanged
@@ -209,7 +229,9 @@ Rotation about the y-axis changes:
 
 The matrix is:
 
-$R_y(\theta)=\begin{bmatrix} \cos\theta & 0 & \sin\theta \\ 0 & 1 & 0 \\ -\sin\theta & 0 &\cos\theta \end{bmatrix}$
+$$
+R_y(\theta)=\begin{bmatrix} \cos\theta & 0 & \sin\theta \\ 0 & 1 & 0 \\ -\sin\theta & 0 &\cos\theta \end{bmatrix}
+$$
 
 Effect:
 - y-coordinate stays unchanged
@@ -228,7 +250,9 @@ Rotation about the z-axis changes:
 
 The matrix is:
 
-$R_z(\theta)=\begin{bmatrix}\cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{bmatrix}$
+$$
+R_z(\theta)=\begin{bmatrix}\cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{bmatrix}
+$$
 
 Effect:
 - z-coordinate stays unchanged
@@ -312,7 +336,9 @@ This process is called **image undistortion**.
 
 Putting everything together:
 
-$s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} \begin{bmatrix}X \\ Y \\ Z \\ 1 \end{bmatrix}$
+$$
+s \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} \begin{bmatrix}X \\ Y \\ Z \\ 1 \end{bmatrix}
+$$
 
 This equation describes the entire imaging pipeline:
 
@@ -398,12 +424,3 @@ The calibrated parameters can then be used for:
 - image undistortion,
 - measurement tasks.
 
-## TESTING
-$$
-A =
-\begin{bmatrix}
-1 & 0 & 0 \\
-0 & 1 & 0 \\
-0 & 0 & 1
-\end{bmatrix}
-$$
