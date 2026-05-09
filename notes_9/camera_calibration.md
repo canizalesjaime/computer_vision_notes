@@ -49,7 +49,10 @@ $$
 is projected into image coordinates:
 
 $$
-p = \begin{bmatrix} u \\ v \\ 1 \end{bmatrix}
+p = \begin{bmatrix} 
+u \\ 
+v \\
+1 \end{bmatrix}
 $$
 
 using the camera model.
@@ -61,7 +64,12 @@ s \begin{bmatrix}
 u \\ 
 v \\ 
 1 
- \end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} \begin{bmatrix} X \\ Y \\ Z \\ 1 \end{bmatrix}
+\end{bmatrix} = K \begin{bmatrix} R & t \end{bmatrix} 
+\begin{bmatrix} 
+X \\
+Y \\
+Z \\
+1 \end{bmatrix}
 $$
 
 where:
