@@ -1,0 +1,16 @@
+{
+  "name": "practice",
+  "build": {
+    "dockerfile": "./pytorch.Dockerfile"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-vscode.cpptools"
+      ]
+    }
+  }
+
+}
