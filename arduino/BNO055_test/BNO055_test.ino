@@ -32,17 +32,17 @@ void loop() {
   imu::Vector<3> euler =
       bno.getVector(Adafruit_BNO055::VECTOR_EULER);
 
-  Serial.print("Heading: ");
+  Serial.print("Yaw(z): ");
   Serial.print(euler.x());
   Serial.print("°   ");
 
-  Serial.print("Roll: ");
-  Serial.print(euler.z());
+  Serial.print("Pitch(y): ");
+  Serial.print(euler.y());
   Serial.print("°   ");
 
-  Serial.print("Pitch: ");
-  Serial.print(euler.y());
-  Serial.println("°");
+    Serial.print("Roll(x): ");
+  Serial.print(euler.z());
+  Serial.println("°   ");
 
   delay(100);
 }
