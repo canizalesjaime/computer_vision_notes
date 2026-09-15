@@ -1,0 +1,8 @@
+*.aux
+*.fdb_latexmk
+*.log
+*.synctex.gz
+*.fls
+*.out
+*.exe
+*__pycache__

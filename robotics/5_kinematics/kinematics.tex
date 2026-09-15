@@ -106,7 +106,20 @@ s\theta_3 & c\theta_3 & 0 & 0\\
 0 & 0 & 0 & 1
 \end{bmatrix}$\\\\
 The whole system can be manipulated using the transformation:\\
-${}^{0}_{3}T={}^{0}_{1}T{}^{1}_{2}T{}^{2}_{3}T$ \newpage
+${}^{0}_{3}T={}^{0}_{1}T{}^{1}_{2}T{}^{2}_{3}T = 
+{}^0_3T =
+\begin{bmatrix}
+\cos(\theta_2+\theta_3) & -\sin(\theta_2+\theta_3) & 0 &
+L_1 + L_2\cos\theta_2
+\\[4pt]
+\sin(\theta_2+\theta_3) & \cos(\theta_2+\theta_3) & 0 &
+L_2\sin\theta_2
+\\[4pt]
+0 & 0 & 1 & d_1
+\\[4pt]
+0 & 0 & 0 & 1
+\end{bmatrix}
+$ \newpage
 
 \section{2nd Example}
 \includegraphics[width=10cm]{RRR_perp.png}\\
@@ -163,6 +176,39 @@ s\theta_3 & c\theta_3 & 0 & 0\\
 0 & 0 & 0 & 1
 \end{bmatrix}$\\\\
 
+Ultimately we get: 
+\[
+{}^0_3T =
+\begin{bmatrix}
+c_1 s_{23} & c_1 c_{23} & -s_1 &
+L_2 c_1 s_2 - (L_1 + L_3)s_1
+\\[4pt]
+s_1 s_{23} & s_1 c_{23} & c_1 &
+L_2 s_1 s_2 + (L_1 + L_3)c_1
+\\[4pt]
+c_{23} & -s_{23} & 0 &
+L_2 c_2
+\\[4pt]
+0 & 0 & 0 & 1
+\end{bmatrix}
+\]
 
-%\include{diagram}
+where: 
+\[
+c_1 = \cos\theta_1,\qquad
+s_1 = \sin\theta_1
+\]
+
+\[
+c_2 = \cos\theta_2,\qquad
+s_2 = \sin\theta_2
+\]
+
+\[
+c_{23} = \cos(\theta_2+\theta_3),\qquad
+s_{23} = \sin(\theta_2+\theta_3)
+\]
+
+\section{Practice: }
+\include{diagram}
 \end{document}
