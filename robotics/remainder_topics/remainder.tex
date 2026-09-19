@@ -62,7 +62,7 @@ Singularities- is a point where the robot loses one or more degrees of freedom. 
 
 
 
-\section{Jacobian Matrix - Partial Differentiation Method}
+\section{Jacobian Matrix - Partial Differentiation Method(to get robot velocities)}
 Jacobian involves finding velocities. Steps:
 \begin{itemize}
     \item DH table $\rightarrow$ Transformation matrix
@@ -178,8 +178,548 @@ l_2s_{12}s_1 + l_2c_{12}c_1\\
 0
 \end{bmatrix}\begin{bmatrix}
 \dot{\theta_1}
-\end{bmatrix}$
+\end{bmatrix}$\\\\
 
+
+\section{Computing Inverse Kinematics}
+
+Consider a planar 2R robot with link lengths $L_1$ and $L_2$.
+The joint variables are
+
+\[
+q =
+\begin{bmatrix}
+\theta_1\\
+\theta_2
+\end{bmatrix}.
+\]
+
+The forward kinematics for the end-effector position are
+
+\[
+x =
+L_1\cos\theta_1
++
+L_2\cos(\theta_1+\theta_2)
+\]
+
+\[
+y =
+L_1\sin\theta_1
++
+L_2\sin(\theta_1+\theta_2).
+\]
+
+Thus,
+
+\[
+P(q) =
+\begin{bmatrix}
+L_1\cos\theta_1 + L_2\cos(\theta_1+\theta_2)\\
+L_1\sin\theta_1 + L_2\sin(\theta_1+\theta_2)
+\end{bmatrix}.
+\]
+
+Given a desired end-effector position
+
+\[
+P_d =
+\begin{bmatrix}
+x_d\\
+y_d
+\end{bmatrix},
+\]
+
+the inverse kinematics problem consists of finding the joint
+variables $\theta_1$ and $\theta_2$ that satisfy
+
+\[
+P(q) = P_d.
+\]
+
+
+\subsection{Analytical Inverse Kinematics}
+
+Starting from the forward kinematics equations,
+
+\[
+x_d =
+L_1\cos\theta_1
++
+L_2\cos(\theta_1+\theta_2)
+\]
+
+\[
+y_d =
+L_1\sin\theta_1
++
+L_2\sin(\theta_1+\theta_2),
+\]
+
+we first solve for $\theta_2$.
+
+Using the law of cosines,
+
+\[
+x_d^2+y_d^2
+=
+L_1^2+L_2^2
++
+2L_1L_2\cos\theta_2.
+\]
+
+Therefore,
+
+\[
+\boxed{
+\cos\theta_2
+=
+\frac{x_d^2+y_d^2-L_1^2-L_2^2}
+{2L_1L_2}
+}
+\]
+
+and
+
+\[
+\sin\theta_2
+=
+\pm\sqrt{1-\cos^2\theta_2}.
+\]
+
+Thus,
+
+\[
+\boxed{
+\theta_2
+=
+\operatorname{atan2}
+\left(
+\pm\sqrt{1-\cos^2\theta_2},
+\cos\theta_2
+\right)
+}
+\]
+
+where the two signs correspond to the two possible configurations,
+commonly called elbow-up and elbow-down.
+
+Once $\theta_2$ is known, $\theta_1$ can be calculated as
+
+\[
+\boxed{
+\theta_1
+=
+\operatorname{atan2}(y_d,x_d)
+-
+\operatorname{atan2}
+\left(
+L_2\sin\theta_2,
+L_1+L_2\cos\theta_2
+\right)
+}
+\]
+
+Therefore, the analytical inverse kinematics solution is
+
+\[
+\boxed{
+q =
+\begin{bmatrix}
+\theta_1\\
+\theta_2
+\end{bmatrix}
+}
+\]
+
+with $\theta_1$ and $\theta_2$ given by the equations above.
+
+
+\subsection{Analytical IK Example}
+
+Let
+
+\[
+L_1=L_2=1
+\]
+
+and let the desired end-effector position be
+
+\[
+P_d=
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}.
+\]
+
+Solving for $\theta_2$,
+
+\[
+\cos\theta_2
+=
+\frac{1^2+1^2-1^2-1^2}
+{2(1)(1)}
+=0.
+\]
+
+Therefore,
+
+\[
+\theta_2
+=
+\operatorname{atan2}(1,0)
+=
+90^\circ.
+\]
+
+Then,
+
+\[
+\theta_1
+=
+\operatorname{atan2}(1,1)
+-
+\operatorname{atan2}(1,1)
+\]
+
+giving
+
+\[
+\theta_1=0^\circ.
+\]
+
+Thus, one inverse kinematics solution is
+
+\[
+\boxed{
+q=
+\begin{bmatrix}
+0^\circ\\
+90^\circ
+\end{bmatrix}.
+}
+\]
+
+
+\subsection{Numerical Inverse Kinematics}
+
+Inverse kinematics can also be solved numerically using the Jacobian.
+
+For small changes in joint position,
+
+\[
+\Delta P
+\approx
+J(q)\Delta q.
+\]
+
+Therefore, if the desired change in end-effector position is known,
+
+\[
+\Delta q
+\approx
+J^{-1}(q)\Delta P.
+\]
+
+Define the position error at iteration $k$ as
+
+\[
+\boxed{
+e_k=P_d-P(q_k)
+}
+\]
+
+where $q_k$ is the current estimate of the joint angles.
+
+The joint correction is then
+
+\[
+\boxed{
+\Delta q_k
+=
+J^{-1}(q_k)e_k
+}
+\]
+
+and the new joint estimate is
+
+\[
+\boxed{
+q_{k+1}
+=
+q_k+\Delta q_k.
+}
+\]
+
+Therefore,
+
+\[
+\boxed{
+q_{k+1}
+=
+q_k+
+J^{-1}(q_k)
+\left[
+P_d-P(q_k)
+\right]
+}
+\]
+
+This process is repeated until the position error is sufficiently small:
+
+\[
+\boxed{
+\|P_d-P(q_k)\|<\epsilon.
+}
+\]
+
+
+\subsection{Jacobian for the Planar 2R Robot}
+
+The position is
+
+\[
+P(q)=
+\begin{bmatrix}
+x(q)\\
+y(q)
+\end{bmatrix}.
+\]
+
+The Jacobian is
+
+\[
+J(q)
+=
+\frac{\partial P}{\partial q}
+=
+\begin{bmatrix}
+\frac{\partial x}{\partial\theta_1}
+&
+\frac{\partial x}{\partial\theta_2}
+\\[4pt]
+\frac{\partial y}{\partial\theta_1}
+&
+\frac{\partial y}{\partial\theta_2}
+\end{bmatrix}.
+\]
+
+Taking the partial derivatives gives
+
+\[
+\boxed{
+J(q)=
+\begin{bmatrix}
+-L_1\sin\theta_1-L_2\sin(\theta_1+\theta_2)
+&
+-L_2\sin(\theta_1+\theta_2)
+\\[4pt]
+L_1\cos\theta_1+L_2\cos(\theta_1+\theta_2)
+&
+L_2\cos(\theta_1+\theta_2)
+\end{bmatrix}.
+}
+\]
+
+
+\subsection{Numerical IK Example}
+
+Again, let
+
+\[
+L_1=L_2=1
+\]
+
+with desired position
+
+\[
+P_d=
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}.
+\]
+
+Choose the initial guess
+
+\[
+q_0=
+\begin{bmatrix}
+30^\circ\\
+30^\circ
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.524\\
+0.524
+\end{bmatrix}
+\text{ rad}.
+\]
+
+Using forward kinematics,
+
+\[
+P(q_0)
+=
+\begin{bmatrix}
+\cos30^\circ+\cos60^\circ\\
+\sin30^\circ+\sin60^\circ
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.366\\
+1.366
+\end{bmatrix}.
+\]
+
+The error is therefore
+
+\[
+e_0
+=
+P_d-P(q_0)
+=
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}
+-
+\begin{bmatrix}
+1.366\\
+1.366
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.366\\
+-0.366
+\end{bmatrix}.
+\]
+
+At the initial configuration,
+
+\[
+J(q_0)
+=
+\begin{bmatrix}
+-1.366 & -0.866\\
+1.366 & 0.5
+\end{bmatrix}.
+\]
+
+The first joint correction is
+
+\[
+\Delta q_0
+=
+J^{-1}(q_0)e_0
+\approx
+\begin{bmatrix}
+-0.268\\
+0.845
+\end{bmatrix}.
+\]
+
+Therefore,
+
+\[
+q_1
+=
+q_0+\Delta q_0
+\]
+
+gives
+
+\[
+q_1
+\approx
+\begin{bmatrix}
+0.256\\
+1.369
+\end{bmatrix}
+\text{ rad}
+\]
+
+or approximately
+
+\[
+q_1
+\approx
+\begin{bmatrix}
+14.7^\circ\\
+78.4^\circ
+\end{bmatrix}.
+\]
+
+The process is then repeated:
+
+\[
+P(q_1)
+\rightarrow
+e_1
+\rightarrow
+J(q_1)
+\rightarrow
+\Delta q_1
+\rightarrow
+q_2.
+\]
+
+After several iterations, the solution converges approximately to
+
+\[
+\boxed{
+q^*
+=
+\begin{bmatrix}
+0^\circ\\
+90^\circ
+\end{bmatrix}.
+}
+\]
+
+
+\subsection{Jacobian Pseudoinverse}
+
+For a general robot, the Jacobian may not be square or invertible.
+Therefore, numerical inverse kinematics commonly uses the
+Moore--Penrose pseudoinverse $J^\dagger$:
+
+\[
+\boxed{
+q_{k+1}
+=
+q_k+
+J^\dagger(q_k)
+\left[
+P_d-P(q_k)
+\right].
+}
+\]
+
+A step-size parameter $\alpha$ may also be introduced:
+
+\[
+\boxed{
+q_{k+1}
+=
+q_k+
+\alpha J^\dagger(q_k)
+\left[
+P_d-P(q_k)
+\right],
+\qquad
+0<\alpha\leq1.
+}
+\]
+
+The iterations continue until
+
+\[
+\boxed{
+\|P_d-P(q_k)\|<\epsilon.
+}
+\]
 
 \section{Jacobian Matrix - Velocity Propagation Method}
 \textbf{Intro Steps:} 
