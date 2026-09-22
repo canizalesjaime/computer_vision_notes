@@ -22,10 +22,10 @@ Links and joints are the fundamental components of a robot. \textbf{Joints} repr
 \textbf{Examples of joints:}\\
 prismatic, spherical, planar(translation with one degree of freedom)\\
 revolute, screw, cylindrical(rotational with one degree of freedom)\\
-\includegraphics[width=7cm]{type_of_joints.png} \newpage
+\includegraphics[width=7cm]{./imgs/type_of_joints.png} \newpage
 
 \section{Conventions for link-frame assignment}
-\includegraphics[width=7cm]{PRR.png}\\
+\includegraphics[width=7cm]{./imgs/PRR.png}\\
 \textbf{Algorithm: }\\
 \textbf{1.} Identify the joint axes and imagine (or draw) infinite lines along them. For
 steps 2 through 5 below, consider two of these neighboring lines (at axes i and
@@ -40,7 +40,7 @@ intersect, assign $x_i$ to be normal to the plane containing the two axes.\\\\
 \textbf{6.} Assign frame \{0\} to match frame \{1\} when the first joint variable is zero. For {N}, choose an
 origin location and $x_n$ direction freely, but generally so as to cause as many
 linkage parameters as possible to become zero.\\\\
-\includegraphics[width=7cm]{PRR_labeled.png}
+\includegraphics[width=7cm]{./imgs/PRR_labeled.png}
 
 \section{Parameters for dh table}
 The DH table is a method for organizing parameters from a system of known joints, links, and frames. These parameters give us general formulas for constructing the transformations matrices required for computations. \\\\
@@ -60,7 +60,7 @@ Frame \{i\} & \textbf{$a_{i-1}$} & \textbf{$\alpha_{i-1}$} & \textbf{$d_i$} & \t
 \textbf{3} & $L_2$ & 0 & 0 & $\theta_3$\\
 \hline
 \end{tabular}\\
-\includegraphics[width=7cm]{PRR_labeled2.png}
+\includegraphics[width=7cm]{./imgs/PRR_labeled2.png}
 
 \section{dh table to transformation matrix}
 Now that we have filled out the DH table, we can make all our transformation matrices using the matrix formula, Note the transformation uses rotation basis: $(R_z(\theta_i)R_x(\alpha_{i-1}))^T$. Tip - Each row corresponds to one transformation matrix, so row 1 has all the variables need for ${}^0_1T$, row 2 has all the variables for ${}^1_2T$ and so on.\\\\
@@ -127,8 +127,8 @@ L_2\sin\theta_2
 $ \newpage
 
 \section{2nd Example}
-\includegraphics[width=10cm]{RRR_perp.png}\\
-\includegraphics[width=10cm]{RRR_perp_labeled.png}\\\\
+\includegraphics[width=10cm]{./imgs/RRR_perp.png}\\
+\includegraphics[width=10cm]{./imgs/RRR_perp_labeled.png}\\\\
 $a_0=dist(z_0,z_1) \text{ in } x_0=0\\
 a_1=dist(z_1,z_2) \text{ in } x_1=0\\
 a_2=dist(z_2,z_3) \text{ in } x_2=L_2\\\\

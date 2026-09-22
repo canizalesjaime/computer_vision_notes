@@ -5,6 +5,7 @@
 \usepackage{pgfplots}
 \usepackage{hyperref}
 \usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 \usepackage{tikz-3dplot}
 \title{Rotations and Transformations in 3D}
 \author{Intro to Robotics}
@@ -24,12 +25,108 @@ In general we will use the eulerain angle method(x'y'z' the prime indicates eule
 \newpage
 \section{Using rotation matrices in 3D}
 As previously mentioned, we will be using rotations in eulerian angle form with yaw(z axis), pitch(y axis), and roll(x axis) parameterization. All the 2D rotation matrix properties still hold, A 3D rotation matrix is orthonormal, det(R)=$\pm1$, $R(-\theta)=R^T(\theta)=R^{-1}(\theta)$. Now let us cover the three rotation matrices used for yaw, pitch, and roll.\\
-\begin{figure}[htp]
+
+
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=5cm ]{ypr.png}
-    \caption{}
-    \label{fig:pubsub}
-\end{figure}\\\\
+
+    \begin{tikzpicture}[
+        scale=1.25,
+        >=Stealth,
+        axis/.style={->, very thick},
+        rotation/.style={->, very thick}
+    ]
+
+    %------------------------------------------------
+    % Coordinate axes
+    %------------------------------------------------
+
+    % Z axis -- blue
+    \draw[axis, blue!70!black]
+        (0,0) -- (0,3.5)
+        node[above, black] {$z$};
+
+    % Y axis -- green
+    \draw[axis, green!60!black]
+        (0,0) -- (3.3,0)
+        node[right, black] {$y$};
+
+    % X axis -- red
+    \draw[axis, red!70!black]
+        (0,0) -- (-2.3,-1.5)
+        node[below left, black] {$x$};
+
+
+    %------------------------------------------------
+    % YAW -- rotation about Z
+    %------------------------------------------------
+
+    % Elliptical-looking curved arrow around z-axis
+    \draw[
+        rotation,
+        blue!70!black
+    ]
+    (-0.55,2.45)
+        .. controls (-1.15,2.25) and (-0.85,1.85) ..
+        (0,1.85)
+        .. controls (0.85,1.85) and (1.15,2.25) ..
+        (0.55,2.45);
+
+    % Arrowhead on yaw
+    \draw[
+        rotation,
+        blue!70!black
+    ]
+    (0.55,2.45)
+        .. controls (0.45,2.55) and (0.35,2.60) ..
+        (0.25,2.60);
+
+    \node[blue!70!black, font=\large]
+        at (-1.25,2.55) {Yaw};
+
+
+    %------------------------------------------------
+    % PITCH -- rotation about Y
+    %------------------------------------------------
+
+    \draw[
+        rotation,
+        green!60!black
+    ]
+    (2.35,0.65)
+        .. controls (1.95,1.10) and (1.75,0.55) ..
+        (1.80,0)
+        .. controls (1.85,-0.55) and (2.15,-0.80) ..
+        (2.45,-0.45);
+
+    \node[green!50!black, font=\large]
+        at (2.25,1.05) {Pitch};
+
+
+    %------------------------------------------------
+    % ROLL -- rotation about X
+    %------------------------------------------------
+
+    \draw[
+        rotation,
+        red!70!black
+    ]
+    (-1.75,-0.65)
+        .. controls (-2.25,-0.35) and (-2.45,-0.75) ..
+        (-2.15,-1.15)
+        .. controls (-1.85,-1.55) and (-1.45,-1.35) ..
+        (-1.45,-0.95);
+
+    \node[red!70!black, font=\large]
+        at (-2.35,-0.25) {Roll};
+
+    \end{tikzpicture}
+
+    \caption{Roll, pitch, and yaw rotations about the $x$, $y$, and $z$ axes.}
+    \label{fig:roll_pitch_yaw}
+\end{figure}
+
+
 Yaw uses the rotation matrix $R_z(\alpha)$, and this is equal to:\\
 $R_z(\alpha)=\begin{bmatrix}
 c\alpha & -s\alpha & 0 \\

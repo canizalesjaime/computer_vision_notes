@@ -1,178 +1,310 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{listings}
 \usepackage{tikz}
-\usetikzlibrary{automata, positioning, arrows}
-\usepackage{amsmath}
-\usepackage{algorithm}
-\usepackage[noend]{algpseudocode}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+
+\definecolor{codebg}{RGB}{30,30,30}
+\definecolor{codegreen}{RGB}{120,190,110}
+\definecolor{codeblue}{RGB}{90,170,255}
+\definecolor{codeorange}{RGB}{230,160,90}
+\definecolor{codepurple}{RGB}{205,120,220}
+\lstdefinestyle{darkcode}{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small\color{white},
+  keywordstyle=\color{codepurple},
+  stringstyle=\color{codeorange},
+  commentstyle=\color{codegreen},
+  identifierstyle=\color{white},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{codebg},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=4,
+  columns=fullflexible,
+  keepspaces=true
+}
+\lstset{style=darkcode}
+
 \title{Code and Architecture Example}
 \author{}
 \date{}
+
 \begin{document}
 \maketitle
-\tikzset{
-         ->,  % makes the edges directed
-         >=stealth, % makes the arrow heads bold
-         node distance=3cm, % specifies the minimum distance between two nodes. Change if necessary.
-         every state/.style={thick, fill=gray!10}, % sets the properties for each ’state’ node
-         initial text=$ $, % sets the text that appears on the start arrow
-         }
 
 \section{Intro}
-Ros is an open-source robotics middleware suite. Although ROS is not an operating system (OS) but a set of software frameworks for robot software development, it provides services designed for a heterogeneous computer cluster such as hardware abstraction, low-level device control, implementation of commonly used functionality, message-passing between processes, and package management. (stole definition from Wikipedia)
+ROS is an open-source robotics middleware suite. Although ROS is not an operating system (OS) but a set of software frameworks for robot software development, it provides services designed for a heterogeneous computer cluster such as hardware abstraction, low-level device control, implementation of commonly used functionality, message-passing between processes, and package management. (stole definition from Wikipedia)
 
 \section{Publisher Subscriber Architecture Model}
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=12cm]{pubsub.png}
-    \caption{}
-    \label{fig:pubsub}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth, node distance=1.8cm and 1.8cm]
+  \node[ellipse, draw=blue!65, fill=blue!45, minimum width=2.8cm, minimum height=1.25cm, align=center] (pub) {\color{white}\textbf{ROS Node}\\\color{black}\fbox{Publisher}};
+  \node[rounded corners, draw=green!50!black, fill=green!25, right=2.0cm of pub, minimum width=3.5cm, minimum height=1.2cm, align=left] (topic) {\textit{Topic:} \textbf{/example}\\\textit{Message Type:} \textbf{std\_msgs/String}};
+  \node[ellipse, draw=blue!65, fill=blue!45, above right=0.25cm and 1.8cm of topic, minimum width=2.8cm, minimum height=1.25cm, align=center] (sub1) {\color{white}\textbf{ROS Node}\\\color{black}\fbox{Subscriber}};
+  \node[ellipse, draw=blue!65, fill=blue!45, below right=0.25cm and 1.8cm of topic, minimum width=2.8cm, minimum height=1.25cm, align=center] (sub2) {\color{white}\textbf{ROS Node}\\\color{black}\fbox{Subscriber}};
+  \draw[->, thick] (pub) -- (topic);
+  \draw[->, thick] (topic) -- (sub1);
+  \draw[->, thick] (topic) -- (sub2);
+  \node at ($(sub1)!0.5!(sub2)$) {\Large$\vdots$};
+\end{tikzpicture}
+\caption{Publisher-subscriber architecture model.}
 \end{figure}
 
+\textbf{Nodes:} Are usually associated with a python script or c++ object. Nodes can do two main things - publish and subscribe. A node can be both a publisher and a subscriber.
 
-\textbf{Nodes:} Are usually associated with a python script or c++ object. Nodes can do two main things - publish and subscribe. A node can be both a publisher and a subscriber.\\\\
-\textbf{Publisher node: } Publish(send) data to a topic(Represented by outing edges in figure above). \\\\
-\textbf{Subscriber node: } Subscribes(listens) to data from a topic(Represented by incoming edges in figure above), then uses a callback function to create desired output from topic data. \\\\
-\textbf{Topics: } Are the name handlers for where nodes will publish and subscribe to data.\\\\
-\textbf{Ros messages: } Are objects predefined in ros or defined by the programmer that can be transmitted over topics. 
+\textbf{Publisher node:} Publish(send) data to a topic (represented by outgoing edges in figure above).
+
+\textbf{Subscriber node:} Subscribes(listens) to data from a topic (represented by incoming edges in figure above), then uses a callback function to create desired output from topic data.
+
+\textbf{Topics:} Are the name handlers for where nodes will publish and subscribe to data.
+
+\textbf{ROS messages:} Are objects predefined in ROS or defined by the programmer that can be transmitted over topics.
+
 \section{System Design}
-Ros programming is often done using a top to bottom approach. The engineer must design the system architecture(as shown above), then develop(code) the individual nodes of the system.\\\\
-\textbf{Advantages:} \\
-1. Simplifies documentation and readability of the system.\\
-2. Stores code in modular nodes that can be easily added and removed to any system(increases code re-usability).\\
-3. Increased programming efficiency since nodes can be written in different languages and are allowed to communicate within a ros environment.\\
-4. Ros nodes communicate using asynchronous message passing, which improves performance by simplifying parallelism and making it more accessible to developers.
+ROS programming is often done using a top to bottom approach. The engineer must design the system architecture (as shown above), then develop (code) the individual nodes of the system.
+
+\textbf{Advantages:}
+\begin{enumerate}
+\item Simplifies documentation and readability of the system.
+\item Stores code in modular nodes that can be easily added and removed to any system (increases code re-usability).
+\item Increased programming efficiency since nodes can be written in different languages and are allowed to communicate within a ROS environment.
+\item ROS nodes communicate using asynchronous message passing, which improves performance by simplifying parallelism and making it more accessible to developers.
+\end{enumerate}
 
 \section{Whats a callback function?}
-Publisher nodes send data to topics, and subscriber nodes collect data from topics. Each time a subscriber node receives data from a topic, the subscriber node will run a callback function. A callback function is a function, that receives data(input) from a topic asynchronously, and computes the output in separate thread. Each time data is received from a topic a new thread opens and runs the callback function. 
+Publisher nodes send data to topics, and subscriber nodes collect data from topics. Each time a subscriber node receives data from a topic, the subscriber node will run a callback function. A callback function is a function that receives data (input) from a topic asynchronously, and computes the output in a separate thread. Each time data is received from a topic a new thread opens and runs the callback function.
 
 \section{Whats a point cloud?}
-A point cloud is a set of 3d points within some frame. Example of devices that gather point cloud data are kinect(xbox), lidar(similar to radar), and stereo camera(uses two rgb cameras to triangulate 3d points). 
-\section{Example of architecture}
-Design a system  architecture using the publisher-subscriber model that from 2D object inferences, the robot moves it head in 
-the direction of individual people. If there is more than one person, the robot creates a list of 
-centroids(representing the people) and iterates through this list by pointing its head at each person for three seconds. 
-The robot has two measuring devices, a camera which outputs rgb images of what the robot is looking at, 
-and a kinect device that outputs a point-cloud of 3D points measured in the same frame as the camera.\\\\\\
-\begin{tikzpicture}
-    % tikz code goes here
-    \node[state, initial] (1) {Rosmaster};
-    \node[state, below of=1] (2) {Rgb Camera};
-    \node[state, below of=2] at (0, -4) (3) {Kinect};
-    \node[state, below of=1, right of=2] at (1,0) (4) {2D Detection};
-    \node[state, below of=2, right of=3] at (1,-4) (5) {Find Centroids};
-    \node[state, right of=5] at (4,-4) (6) {Point Head};
+A point cloud is a set of 3D points within some frame. Example devices that gather point cloud data are Kinect (Xbox), lidar (similar to radar), and stereo camera (uses two RGB cameras to triangulate 3D points).
 
-    \draw   (2) edge[above] node{rgbImage} (4)
-            (3) edge[above] node{depthImage} (5)
-            (4) edge[above] node{inferences2D} (5)
-            (5) edge[above] node{centroidList} (6);
+\section{Example of architecture}
+Design a system architecture using the publisher-subscriber model that, from 2D object inferences, moves the robot's head in the direction of individual people. If there is more than one person, the robot creates a list of centroids (representing the people) and iterates through this list by pointing its head at each person for three seconds. The robot has two measuring devices: a camera which outputs RGB images of what the robot is looking at, and a Kinect device that outputs a point cloud of 3D points measured in the same frame as the camera.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth, node distance=1.35cm and 1.6cm, every node/.style={font=\small}]
+\node[draw, rounded corners] (cam) {RGB Camera};
+\node[draw, rounded corners, below=1.4cm of cam] (kin) {Kinect};
+\node[draw, rounded corners, right=2.1cm of cam] (det) {2D Detection};
+\node[draw, rounded corners, right=2.1cm of kin] (cent) {Find Centroids};
+\node[draw, rounded corners, right=2.4cm of det, yshift=-0.7cm] (head) {Point Head};
+\draw[->] (cam) -- node[above]{rgbImage} (det);
+\draw[->] (kin) -- node[below]{depthImage} (cent);
+\draw[->] (det) -- node[above, sloped]{inferences2D} (head);
+\draw[->] (cent) -- node[below, sloped]{centroidList} (head);
+\node[above=0.8cm of cam] {Rosmaster};
 \end{tikzpicture}
-\label{fig:my_label}
+\caption{Example ROS architecture.}
+\end{figure}
 
 \section{Relating your first run to the publisher subscriber model}
-Remember to run in each terminal you open:\\
-1. cd catkin\_ws\\ 
-2. source devel/setup.bash\\
-\textbf{Roscore}- Running roscore in a separate terminal will set up your ros master node for the system. The ros master node, is a node that manages all other nodes and topics created by the user. \\\\
-\textbf{rosrun}- This command runs and adds a node to your architecture.\\\\
-examples(run each in a new terminal):\\ 
-rosrun talk\_listen listener.py\\ 
-rosrun talk\_listen talker.py\\\\
-The argument test\_run is a package, for now think of a package as a  set of nodes that defines an architecture.\\\\
-listener.py is the python script that runs the node listener, which subscribes to topic chatter.\\\\
-talker.py is the python script that runs the node talker, which publishes to the topic chatter. \\
-(code provided on blackboard please review!)\\\\
-\begin{tikzpicture}
-    % tikz code goes here
-    \node[state, initial] (1) {rosmaster};
-    \node[state, below of=1] (2) {listener};
-    \node[state, below of=1, right of=2] at (1,0) (3) {talker};
+Remember to run in each terminal you open:
+\begin{enumerate}
+\item \texttt{cd catkin\_ws}
+\item \texttt{source devel/setup.bash}
+\end{enumerate}
 
-    \draw   (2) edge[above] node{chatter} (3);
-\end{tikzpicture}\\\\
-To view this architecture in ros(for debugging and making sure everything is correct) run the command: \\
-\textbf{rosrun rqt\_graph rqt\_graph}
+\textbf{Roscore-} Running \texttt{roscore} in a separate terminal will set up your ROS master node for the system. The ROS master node is a node that manages all other nodes and topics created by the user.
+
+\textbf{rosrun-} This command runs and adds a node to your architecture.
+
+Examples (run each in a new terminal):
+\begin{lstlisting}[language=bash,numbers=none]
+rosrun talk_listen listener.py
+rosrun talk_listen talker.py
+\end{lstlisting}
+
+The argument \texttt{talk\_listen} is a package; for now think of a package as a set of nodes that defines an architecture.
+
+\texttt{listener.py} is the python script that runs the node listener, which subscribes to topic \texttt{chatter}.
+
+\texttt{talker.py} is the python script that runs the node talker, which publishes to the topic \texttt{chatter}. (code provided on blackboard please review!)
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth, node distance=3cm]
+\node[draw, rounded corners] (l) {listener};
+\node[draw, rounded corners, right=of l] (t) {talker};
+\draw[->, thick] (t) -- node[above]{chatter} (l);
+\node[above=0.8cm of l] {rosmaster};
+\end{tikzpicture}
+\caption{Listener/talker architecture.}
+\end{figure}
+
+To view this architecture in ROS (for debugging and making sure everything is correct) run the command:
+\begin{lstlisting}[language=bash,numbers=none]
+rosrun rqt_graph rqt_graph
+\end{lstlisting}
 
 \section{Turtlesim}
-First lets start by running roslaunch command. The roslaunch command allows you to launch multiple nodes and the rosmaster with just one command.\\
-example: \emph{roslaunch turtle\_motion turtle\_clean.launch} \\(remember to create the package as instructed in the ROS\_Instructions pdf available on blackboard.)\\\\
-If nothing happens on the turtle simulator, open up the file catkin\_ws/src/turtle\_motion/src/grid\_clean.py and call any of the functions included from there in the main function.\\\\
-This command will run your rosmaster, rosrun turtlesim turtlesim\_node, and rosrun turtle\_motion grid\_clean.py all in one terminal and you do not have to worry about managing multiple nodes across multiple terminals.\\\\
-\begin{figure}[htp]
-    \includegraphics[width=12cm]{launchfile.png}
-    \label{fig:launch}
-\end{figure} 
-The important things to note about this file is that you must start and end the file with the launch tag ($<$launch$>$).  Each node you set up begins with a node tag($<$node$>$) and then you must specify the package where the node is contained(pkg=), the name of the file that sets up the node(type=), and the name of the node(name=); all other arguments are optional.
-\newpage
+First lets start by running the \texttt{roslaunch} command. The \texttt{roslaunch} command allows you to launch multiple nodes and the rosmaster with just one command.
 
-\begin{figure}[htp]
-    \includegraphics[width=12cm]{main.png}
-    \label{fig:mainy}
-\end{figure} 
-The image above shows how we set up the node, publisher and subscriber. Note that every time you set up a publisher or subscriber you must both provide a topic name and a message type.Example: rospy.Subscriber(topic\_name, msg\_type, callback function name). The callback function is written by the programmer, and it is the code that is executed every time the node receives a message on a topic.\\\\
+Example:
+\begin{lstlisting}[language=bash,numbers=none]
+roslaunch turtle_motion turtle_clean.launch
+\end{lstlisting}
 
-\begin{figure}[htp]
-    \includegraphics[width=10cm]{callback.png}
-    \label{fig:callback}
-\end{figure} 
-Example of callback in code that updates variables x, y, and yaw based on the robots current position on the simulator.\\\\
-\newpage 
+(remember to create the package as instructed in the ROS Instructions PDF available on blackboard.)
 
-\begin{figure}[htp]
-    \includegraphics[width=10cm]{move.png}
-    \label{fig:move}
-\end{figure} 
-The move function has the robot move at some speed linear.x by publishing to the /turtle1/cmd\_vel topic. The message type of this topic is geometry\_msgs/Twist. This message has two member variables Vector3 linear and Vector3 angular. The linear variable sets the linear velocity of the turtle and the angular variable sets the angular velocity of the turtle robot. In the code we use the distance formula to compute how much the robot has moved from its initial position.\\\\
+If nothing happens on the turtle simulator, open up the file \texttt{catkin\_ws/src/turtle\_motion/src/grid\_clean.py} and call any of the functions included from there in the main function.
 
-\begin{figure}[htp]
-    \includegraphics[width=10cm]{rotate.png}
-    \label{fig:rotate}
-\end{figure} 
-The rotate function also publishes /turtle1/cmd\_vel topic and uses a message type of geometry\_msgs/Twist. This time we are interested 
-in the member variable Vector3 angular which sets the rotational velocity of the robot. The speed input parameter tells us how fast our turtle robot will rotate per second, and the idea is to rotate for however many seconds are required to reach our goal. 
+This command will run your rosmaster, \texttt{rosrun turtlesim turtlesim\_node}, and \texttt{rosrun turtle\_motion grid\_clean.py} all in one terminal and you do not have to worry about managing multiple nodes across multiple terminals.
+
+The important things to note about this file is that you must start and end the file with the launch tag (\texttt{<launch>}). Each node you set up begins with a node tag (\texttt{<node>}) and then you must specify the package where the node is contained (\texttt{pkg=}), the name of the file that sets up the node (\texttt{type=}), and the name of the node (\texttt{name=}); all other arguments are optional.
+
+The launch-file image in the original document is rewritten below as editable LaTeX code:
+\begin{lstlisting}[language=XML]
+<launch>
+    <node pkg="turtlesim" type="turtlesim_node"
+          name="turtlesim_node" output="screen"/>
+    <node pkg="turtle_motion" type="grid_clean.py"
+          name="grid_cleaner_node" output="screen"/>
+</launch>
+\end{lstlisting}
+
+The original document next shows how the node, publisher and subscriber are set up. Every time you set up a publisher or subscriber you must provide both a topic name and a message type. Example: \texttt{rospy.Subscriber(topic\_name, msg\_type, callback\_function\_name)}. The callback function is written by the programmer, and it is the code executed every time the node receives a message on a topic.
+
+\begin{lstlisting}[language=Python]
+if __name__ == '__main__':
+    try:
+        rospy.init_node("grid_clean", anonymous=True)
+        vel_pub = rospy.Publisher('/turtle1/cmd_vel', Twist,
+                                  queue_size=10)
+        pose_sub = rospy.Subscriber('/turtle1/pose', Pose,
+                                    poseCallback)
+        time.sleep(2)
+
+    except rospy.ROSInterruptException:
+        rospy.loginfo("node terminated")
+\end{lstlisting}
+
+Example of callback in code that updates variables x, y, and yaw based on the robot's current position on the simulator:
+
+\begin{lstlisting}[language=Python]
+def poseCallback(pose_message):
+    global x, y, yaw
+    x = pose_message.x
+    y = pose_message.y
+    yaw = pose_message.theta
+\end{lstlisting}
+
+The move function has the robot move at some speed \texttt{linear.x} by publishing to the \texttt{/turtle1/cmd\_vel} topic. The message type of this topic is \texttt{geometry\_msgs/Twist}. This message has two member variables, Vector3 \texttt{linear} and Vector3 \texttt{angular}. The linear variable sets the linear velocity of the turtle and the angular variable sets the angular velocity of the turtle robot. In the code we use the distance formula to compute how much the robot has moved from its initial position.
+
+\begin{lstlisting}[language=Python]
+def move(speed, distance, is_forward):
+    vel_msg = Twist()
+    x0 = x
+    y0 = y
+
+    if is_forward:
+        vel_msg.linear.x = abs(speed)
+    else:
+        vel_msg.linear.x = -abs(speed)
+
+    distance_moved = 0.0
+    loop_rate = rospy.Rate(10)
+
+    while distance_moved < distance:
+        vel_pub.publish(vel_msg)
+        loop_rate.sleep()
+        distance_moved = abs(math.sqrt(((x-x0)**2) + ((y-y0)**2)))
+\end{lstlisting}
+
+The rotate function also publishes to the \texttt{/turtle1/cmd\_vel} topic and uses a message type of \texttt{geometry\_msgs/Twist}. This time we are interested in the member variable Vector3 \texttt{angular}, which sets the rotational velocity of the robot. The speed input parameter tells us how fast our turtle robot will rotate per second, and the idea is to rotate for however many seconds are required to reach our goal.
+
+\begin{lstlisting}[language=Python]
+def rotate(angular_speed_degree, relative_angle_degree, clockwise):
+    vel_msg = Twist()
+    angular_speed = math.radians(abs(angular_speed_degree))
+
+    if clockwise:
+        vel_msg.angular.z = -abs(angular_speed)
+    else:
+        vel_msg.angular.z = abs(angular_speed)
+
+    loop_rate = rospy.Rate(10)
+    current_angle_degree = 0.0
+    t0 = rospy.Time.now().to_sec()
+
+    while current_angle_degree < relative_angle_degree:
+        vel_pub.publish(vel_msg)
+        loop_rate.sleep()
+        t1 = rospy.Time.now().to_sec()
+        current_angle_degree = (t1-t0) * angular_speed_degree
+\end{lstlisting}
+
 \subsection{turtle architecture}
-\begin{tikzpicture}
-    % tikz code goes here
-    \node[state, initial] (1) {rosmaster};
-    \node[state, below of=1] (2) {turtlesim\_node};
-    \node[state, below of=1, right of=2] at (3,0) (3) {grid\_clean};
-
-    \draw   (2) edge[above] [bend left] node{/turtle1/pose} (3) 
-            (3) edge[below] [bend left] node{/turtle1/cmd\_vel} (2);
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[>=Stealth, node distance=2.5cm]
+\node[draw, rounded corners] (sim) {turtlesim node};
+\node[draw, rounded corners, right=4cm of sim] (grid) {grid clean};
+\draw[->, thick, bend left=25] (sim) to node[above]{/turtle1/pose} (grid);
+\draw[->, thick, bend left=25] (grid) to node[below]{/turtle1/cmd\_vel} (sim);
+\node[above=0.9cm of sim] {rosmaster};
 \end{tikzpicture}
+\caption{Turtlesim architecture.}
+\end{figure}
 
-\newpage
-
-\section{Website Server Ros Setup}
-\textbf{1.} Create an account on theconstructsim.com\\\\
-\textbf{2.} In the left hand column, click on my "rosjects" then click on create "new rosject".\\\\
-\textbf{3.} Name your rosject whatever you would like but make sure to select ros distro as "Ros melodic".\\\\
-\textbf{4.} There will be a tool bar at the bottom of the screen when you open your project. From this tool bar you will be using the following: Web shell, Code editor, grapical tools.
+\section{Website Server ROS Setup}
+\begin{enumerate}
+\item Create an account on \texttt{theconstructsim.com}.
+\item In the left hand column, click on my ``rosjects'' then click on create ``new rosject''.
+\item Name your rosject whatever you would like but make sure to select ROS distro as ``ROS melodic''.
+\item There will be a tool bar at the bottom of the screen when you open your project. From this tool bar you will be using the following: Web shell, Code editor, graphical tools.
+\end{enumerate}
 
 \section{Environment Setup}
-\textbf{1.} Create a folder name catkin\_ws. Create a sub-folder inside of catkin\_ws named src. catkin\_ws will be your local working environment for ros.\\\\
-\textbf{2.} Run the command \emph{cd $\sim$/catkin\_ws} followed by \emph{catkin\_make}. The command catkin\_make converts a regular folder into a ros repository.\\\\
-\textbf{3.} Every time you open a web shell or new tabs in web shell run \emph{source $\sim$/catkin\_ws/devel/setup.bash}. This command sets your working environment in the current shell to the repo catkin\_ws. Otherwise you will be running from its installation working environment. 
+\begin{enumerate}
+\item Create a folder named \texttt{catkin\_ws}. Create a sub-folder inside of \texttt{catkin\_ws} named \texttt{src}. \texttt{catkin\_ws} will be your local working environment for ROS.
+\item Run \texttt{cd \textasciitilde/catkin\_ws} followed by \texttt{catkin\_make}. The command \texttt{catkin\_make} converts a regular folder into a ROS repository.
+\item Every time you open a web shell or new tabs in web shell run \texttt{source \textasciitilde/catkin\_ws/devel/setup.bash}. This command sets your working environment in the current shell to the repo \texttt{catkin\_ws}. Otherwise you will be running from its installation working environment.
+\end{enumerate}
 
-\section{Creating ros packages}
-\textbf{1.} A ros package is a small standalone ros project created inside of your ros repository.\\\\
-\textbf{2.}  Run \emph{cd $\sim$/catkin\_ws/src} followed by, \emph{catkin\_create\_pkg [name of package] [depend1] [depend2] ...}\\
-An example(Do it!): \emph{catkin\_create\_pkg talk\_listen std\_msgs roscpp rospy}\\\\
-\textbf{3.} After creating a package make sure to execute steps 2 and 3 from section Environment Setup.
+\section{Creating ROS packages}
+\begin{enumerate}
+\item A ROS package is a small standalone ROS project created inside of your ROS repository.
+\item Run \texttt{cd \textasciitilde/catkin\_ws/src} followed by \texttt{catkin\_create\_pkg [name of package] [depend1] [depend2] ...}
+
+An example (Do it!):
+\begin{lstlisting}[language=bash,numbers=none]
+catkin_create_pkg talk_listen std_msgs roscpp rospy
+\end{lstlisting}
+\item After creating a package make sure to execute steps 2 and 3 from section Environment Setup.
+\end{enumerate}
 
 \section{First Example}
-\textbf{1.} On blackboard under course materials you will find a folder called ros\_examples, and inside this folder another folder called talk\_listen\_stuff. Copy the files "listener.py" and "talker.py" into $\sim$/catkin\_ws/src/talk\_listen/src.\\\\
-\textbf{2.} Make sure files are executable by running \emph{chmod +x  $\sim$/catkin\_ws/src/talk\_listen/src/listener.py} and \emph{chmod +x  $\sim$/catkin\_ws/src/talk\_listen/src/talker.py}\\\\
-\textbf{3.} In your current shell run the command \emph{roscore}, this will set up a ros master node that will manage all future nodes.\\\\
-\textbf{4.} open a new tab in your web shell, run \emph{source $\sim$/catkin\_ws/devel/setup.bash} followed by \emph{rosrun talk\_listen listener.py}\\\\
-\textbf{5.} open a third tab in your web shell, run \emph{source $\sim$/catkin\_ws/devel/setup.bash} followed by \emph{rosrun talk\_listen talker.py}\\\\
-\textbf{6.} The steps in this section should result in basic stdout output in the terminal where you ran the listener node (\emph{rosrun talk\_listen listener.py}). Congrats you just ran your first ros system!
+\begin{enumerate}
+\item On blackboard under course materials you will find a folder called \texttt{ros\_examples}, and inside this folder another folder called \texttt{talk\_listen\_stuff}. Copy the files \texttt{listener.py} and \texttt{talker.py} into \texttt{\textasciitilde/catkin\_ws/src/talk\_listen/src}.
+\item Make sure files are executable by running:
+\begin{lstlisting}[language=bash,numbers=none]
+chmod +x ~/catkin_ws/src/talk_listen/src/listener.py
+chmod +x ~/catkin_ws/src/talk_listen/src/talker.py
+\end{lstlisting}
+\item In your current shell run \texttt{roscore}; this will set up a ROS master node that will manage all future nodes.
+\item Open a new tab in your web shell, run \texttt{source \textasciitilde/catkin\_ws/devel/setup.bash} followed by \texttt{rosrun talk\_listen listener.py}.
+\item Open a third tab in your web shell, run \texttt{source \textasciitilde/catkin\_ws/devel/setup.bash} followed by \texttt{rosrun talk\_listen talker.py}.
+\item The steps in this section should result in basic stdout output in the terminal where you ran the listener node (\texttt{rosrun talk\_listen listener.py}). Congrats, you just ran your first ROS system!
+\end{enumerate}
 
 \section{More}
-Moving forward you will just need to create two more packages for the homework(run these in $\sim$/catkin\_ws/src):\\\\
-1. \emph{catkin\_create\_pkg turtle\_motion std\_msgs roscpp rospy}\\\\
-2. \emph{catkin\_create\_pkg learn\_tf2 tf2 tf2\_ros roscpp rospy turtlesim}\\\\
-Use the examples in ros\_examples(on blackboard) to test these projects out.
+Moving forward you will just need to create two more packages for the homework (run these in \texttt{\textasciitilde/catkin\_ws/src}):
+\begin{enumerate}
+\item \texttt{catkin\_create\_pkg turtle\_motion std\_msgs roscpp rospy}
+\item \texttt{catkin\_create\_pkg learn\_tf2 tf2 tf2\_ros roscpp rospy turtlesim}
+\end{enumerate}
+Use the examples in \texttt{ros\_examples} (on blackboard) to test these projects out.
 
 \end{document}

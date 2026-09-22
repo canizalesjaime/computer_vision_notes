@@ -35,7 +35,7 @@ City University of New York \\
 \section{Introduction}
 \begin{frame}\frametitle{Introduction}
 \begin{figure}
-\includegraphics[width=12cm]{pick_place.png}
+\includegraphics[width=12cm]{./imgs/pick_place.png}
 \end{figure}
 \begin{block}{Problem Statement}
 How to solve the multi-objective optimization problem of pick and place, where a robot arm can pick up an object and place it somewhere else.
@@ -88,7 +88,7 @@ Learning a SE(3) diffusion model for 6DOF grasping, giving rise to a novel frame
 
 \begin{frame}{Inventor of LIE Algebra}
 \begin{figure}
-\includegraphics[width=3cm]{lie.png}
+\includegraphics[width=3cm]{./imgs/lie.png}
 \end{figure}
 \begin{itemize}
     \item Marius Sophus Lie (17 December 1842 – 18 February 1899) was a Norwegian mathematician. He largely created the theory of continuous symmetry and applied it to the study of geometry and differential equations. He also made substantial contributions to the development of algebra.
@@ -142,7 +142,7 @@ $q(H|H_{\mu,} \Sigma) \propto exp(-0.5 ||Logmap(H^{-1}_{\mu} H)||^2_{\Sigma^{-1}
 
 \begin{frame}{Diffusion}
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{diffusion_forward.png}
+\includegraphics[width=0.8\linewidth]{./imgs/diffusion_forward.png}
 \end{figure}
 \begin{itemize}
 \item In physics diffusion is the movement of particles move from an area of high concentration to an area of low concentration until equilibrium is reached.
@@ -165,7 +165,7 @@ $q(H|H_{\mu,} \Sigma) \propto exp(-0.5 ||Logmap(H^{-1}_{\mu} H)||^2_{\Sigma^{-1}
 
 \begin{frame}{Annealed Langevin Markov Chain Monte Carlo}
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{grasp_diffusion.png}
+\includegraphics[width=0.8\linewidth]{./imgs/grasp_diffusion.png}
 \end{figure}
 \begin{itemize}
     \item Draw sample from the distribution $x_L \sim p_L(x)$ and then simulate the inverse langevian diffusion process for $L$ steps, from $k=L$ to $k=1$
@@ -201,7 +201,7 @@ $q(H|H_{\mu,} \Sigma) \propto exp(-0.5 ||Logmap(H^{-1}_{\mu} H)||^2_{\Sigma^{-1}
 
 \begin{frame}\frametitle{Architecture}
 \begin{figure}
-\includegraphics[width=1\linewidth]{architecture.png}
+\includegraphics[width=1\linewidth]{./imgs/architecture.png}
 \end{figure}
 \begin{itemize}
     \item shape codes are the known shapes of the object in training data
@@ -247,7 +247,7 @@ solving a grasp and motion optimization problem jointly
 
 \begin{frame}\frametitle{Test 1 (Evaluation of 6DoF grasp pose generation)}
 \begin{figure}
-\includegraphics[width=.8\linewidth]{results.png}
+\includegraphics[width=.8\linewidth]{./imgs/results.png}
 \end{figure}
 \begin{itemize}
     \item Consider 90 different mugs and evaluate 200
@@ -260,7 +260,7 @@ between two empirical probability distributions.
 
 \begin{frame}{Test 2 (Performance on grasp and motion optimization)}
 \begin{figure}
-    \includegraphics[width=8cm]{results_grasp_with_motion.png}
+    \includegraphics[width=8cm]{./imgs/results_grasp_with_motion.png}
 \end{figure}
     \begin{itemize}
         \item The success is measured based on the robot being
@@ -300,7 +300,7 @@ with 100\% (20/20) success.
 \section{Conclusion}
 \begin{frame}\frametitle{Conclusion}
 \begin{figure}
-    \includegraphics[width=12cm]{results_soa.png}
+    \includegraphics[width=12cm]{./imgs/results_soa.png}
 \end{figure}
 \begin{itemize}
 \item Comparison to state of the art at the time. 

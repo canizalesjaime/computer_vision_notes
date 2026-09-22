@@ -517,8 +517,48 @@ $\begin{bmatrix}
 \end{bmatrix}$
 
 \section{Quaternions to rotation matrices}
-\begin{figure}[htp]
-    \includegraphics[width=12cm]{quat_to_euler.png}
-    \label{fig:mainy}
-\end{figure} \\
+\[
+\begin{bmatrix}
+\phi \\[4pt]
+\theta \\[4pt]
+\psi
+\end{bmatrix}
+=
+\begin{bmatrix}
+\operatorname{atan2}
+\left(
+2(q_w q_x + q_y q_z),
+1 - 2(q_x^2 + q_y^2)
+\right)
+\\[10pt]
+
+-\frac{\pi}{2}
++
+2\operatorname{atan2}
+\left(
+\sqrt{1 + 2(q_w q_y - q_x q_z)},
+\sqrt{1 - 2(q_w q_y - q_x q_z)}
+\right)
+\\[10pt]
+
+\operatorname{atan2}
+\left(
+2(q_w q_z + q_x q_y),
+1 - 2(q_y^2 + q_z^2)
+\right)
+\end{bmatrix}
+\]
+
+Moreover, typical implementations of arctan also might have some
+numerical disadvantages near zero and one. Some implementations use
+the equivalent expression:
+
+\[
+\theta
+=
+\arcsin\left(
+2(q_w q_y - q_x q_z)
+\right)
+\]
+
 \end{document}
