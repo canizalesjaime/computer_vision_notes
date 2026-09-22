@@ -3,6 +3,9 @@
 *.log
 *.synctex.gz
 *.fls
+*.nav
+*.snm
+*.toc
 *.out
 *.exe
 *__pycache__
